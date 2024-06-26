@@ -2,17 +2,17 @@ import React from 'react'
 import {View, Text, Button, StyleSheet} from 'react-native'
 import {useNavigation} from '@react-navigation/native'
 
-export default function Home(): JSX.Element {
+export default function MovieDetail(): JSX.Element {
     const navigation = useNavigation()
 
     return (
         <View style={styles.container}>
             <Text>
-                Home
+                Movie Detail
             </Text>
             <Button
-                title='Go to Movie Detail'
-                onPress={() => navigation.navigate('MovieDetail')}
+                title='Go to Home'
+                onPress={() => navigation.navigate('Home')}
             />
         </View>
     )
