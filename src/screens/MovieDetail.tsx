@@ -3,18 +3,22 @@ import { Text, View, StyleSheet, TouchableOpacity, Image, ScrollView, FlatList }
 import { useNavigation } from '@react-navigation/native'
 import Feather from 'react-native-vector-icons/Feather'
 import FontAwesome from 'react-native-vector-icons/FontAwesome'
+import AsyncStorage from '@react-native-async-storage/async-storage'
 import { API_ACCESS_TOKEN } from '@env'
 import MovieItem from '../components/movies/MovieItem'
+
 
 const MovieDetail = ({ route }: any): JSX.Element => {
   const { id } = route.params
   const navigation = useNavigation()
   const [movieDetails, setMovieDetails] = useState<any>(null)
   const [recommendations, setRecommendations] = useState<any[]>([])
+  const [isFavorite, setIsFavorite] = useState(false)
 
   useEffect(() => {
     getMovieDetails()
     getMovieRecommendations()
+    checkIsFavorite()
   }, [id])
 
   const getMovieDetails = (): void => {
@@ -57,6 +61,36 @@ const MovieDetail = ({ route }: any): JSX.Element => {
       })
   }
 
+  const checkIsFavorite = async () => {
+    try {
+      const favorites = await AsyncStorage.getItem('favorites')
+      if (favorites !== null) {
+        const favArray = JSON.parse(favorites)
+        setIsFavorite(favArray.some(favMovie => favMovie.id === id))
+      }
+    } catch (error) {
+      console.error(error)
+    }
+  }
+
+  const toggleFavorite = async () => {
+    try {
+      const favorites = await AsyncStorage.getItem('favorites')
+      let favArray = favorites ? JSON.parse(favorites) : []
+
+      if (isFavorite) {
+        favArray = favArray.filter(favMovie => favMovie.id !== id)
+      } else {
+        favArray.push({ id, ...movieDetails })
+      }
+
+      await AsyncStorage.setItem('favorites', JSON.stringify(favArray))
+      setIsFavorite(!isFavorite)
+    } catch (error) {
+      console.error(error)
+    }
+  }
+
   if (!movieDetails) {
     return (
       <View style={styles.loadingContainer}>
@@ -79,9 +113,13 @@ const MovieDetail = ({ route }: any): JSX.Element => {
       />
       <Text style={styles.title}>{movieDetails.title}</Text>
       <View style={styles.ratingRow}>
-        <FontAwesome name="star" size={12} color="#ffd700" style={styles.starIcon} />
+        <FontAwesome name="star" size={24} color="#ffd700" style={styles.starIcon} />
         <Text style={styles.rating}>{movieDetails.vote_average.toFixed(1)}</Text>
+        <TouchableOpacity onPress={toggleFavorite} style={styles.favoriteButton}>
+          <FontAwesome name={isFavorite ? "heart" : "heart-o"} size={24} color="red" />
+        </TouchableOpacity>
       </View>
+      
       <Text style={styles.synopsis}>{movieDetails.overview}</Text>
       <View style={styles.detailsContainer}>
         <View style={styles.column}>
@@ -139,6 +177,9 @@ const styles = StyleSheet.create({
     fontSize: 18,
     fontWeight: 'medium',
   },
+  favoriteButton: {
+    marginLeft: 'auto',
+  },
   movieImage: {
     width: '100%',
     height: 200,
@@ -148,12 +189,12 @@ const styles = StyleSheet.create({
   title: {
     fontSize: 24,
     fontWeight: '900',
-    marginBottom: 0,
+    marginBottom: 10,
   },
   rating: {
-    fontSize: 12,
+    fontSize: 18,
     marginBottom: 0,
-    paddingLeft: 4,
+    paddingLeft: 8,
   },
   synopsis: {
     fontSize: 12,
