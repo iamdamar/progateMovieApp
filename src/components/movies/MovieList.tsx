@@ -79,18 +79,19 @@ const styles = StyleSheet.create({
     alignItems: 'center',
   },
   purpleLabel: {
-    width: 20,
+    width: 2,
     height: 40,
-    borderRadius: 20,
+    borderRadius: 4,
     backgroundColor: '#8978A4',
     marginRight: 12,
+    marginLeft: 18,
   },
   title: {
-    fontSize: 20,
-    fontWeight: '900',
+    fontSize: 18,
+    fontWeight: 'bold',
   },
   movieList: {
-    paddingLeft: 4,
+    paddingLeft: 24,
     marginTop: 8,
   },
 })
