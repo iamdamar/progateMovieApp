@@ -113,12 +113,13 @@ const MovieDetail = ({ route }: any): JSX.Element => {
       />
       <Text style={styles.title}>{movieDetails.title}</Text>
       <View style={styles.ratingRow}>
-        <FontAwesome name="star" size={12} color="#ffd700" style={styles.starIcon} />
+        <FontAwesome name="star" size={24} color="#ffd700" style={styles.starIcon} />
         <Text style={styles.rating}>{movieDetails.vote_average.toFixed(1)}</Text>
-      </View>
-      <TouchableOpacity onPress={toggleFavorite} style={styles.favoriteButton}>
+        <TouchableOpacity onPress={toggleFavorite} style={styles.favoriteButton}>
           <FontAwesome name={isFavorite ? "heart" : "heart-o"} size={24} color="red" />
         </TouchableOpacity>
+      </View>
+      
       <Text style={styles.synopsis}>{movieDetails.overview}</Text>
       <View style={styles.detailsContainer}>
         <View style={styles.column}>
@@ -188,12 +189,12 @@ const styles = StyleSheet.create({
   title: {
     fontSize: 24,
     fontWeight: '900',
-    marginBottom: 0,
+    marginBottom: 10,
   },
   rating: {
-    fontSize: 12,
+    fontSize: 18,
     marginBottom: 0,
-    paddingLeft: 4,
+    paddingLeft: 8,
   },
   synopsis: {
     fontSize: 12,
