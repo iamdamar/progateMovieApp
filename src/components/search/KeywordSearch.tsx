@@ -83,6 +83,7 @@ const KeywordSearch = () => {
         <FlatList
           data={movies}
           numColumns={3}
+          columnWrapperStyle={styles.row}
           renderItem={({ item }) => (
             <MovieItem
               movie={item}
@@ -114,6 +115,9 @@ const styles = StyleSheet.create({
   },
   title: {
     fontSize: 32,
+  },
+  row: {
+    marginBottom: 6,
   },
 });
 
