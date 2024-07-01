@@ -6,6 +6,7 @@ import {
   ScrollView,
   TouchableOpacity,
   FlatList,
+  StyleSheet,
 } from 'react-native'
 import MovieItem from '../movies/MovieItem';
 import { Movie, MovieGenre } from '../../types/app';
@@ -89,8 +90,15 @@ export default function Search(): JSX.Element {
             />
           )}
           numColumns={3}
+          columnWrapperStyle={styles.row}
         />
       )}
     </View>
   );
 };
+
+const styles = StyleSheet.create({
+  row: {
+    marginBottom: 6,
+  },
+});
